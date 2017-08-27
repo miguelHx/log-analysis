@@ -18,6 +18,7 @@ There are three tables:
 2. Install Vagrant
 
 ..* Download it from [this link](https://www.vagrantup.com/downloads.html)
+
 ..* **Windows users:** The Installer may ask you to grant network permissions to Vagrant or make a firewall exception. Be sure to allow this.
 
 3. Download this repository as a zip file and then unzip to wherever
@@ -28,12 +29,15 @@ There are three tables:
 5. Inside the **vagrant** subdirectory, run the command `vagrant up`
 
 ..* This will cause Vagrant to download the Linux operating system and install it
+
 ..* May take a while (many minutes) depending on your internet connection speed
 
 6. When `vagrant up` finishes running and the shell prompt is back, run `vagrant ssh` to log in to the Linux VM
 
 ..* Files in the VM's /vagrant directory are shared with the vagrant folder on your computer. But other data inside the VM is not. 
+
 ..* For instance, the PostgreSQL database itself lives only inside the VM.
+
 ..* If you exit the terminal or reboot the computer, you will need to run `vagrant up` to restart the VM
 
 7. Now that you are logged in, run `cd /vagrant` to gain access to the shared directory
