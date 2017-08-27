@@ -10,7 +10,7 @@ There are three tables:
 2. Who are the most popular article authors of all time? That is, when you sum up all of the articles each author has written, which authors get the most page views? Present this as a sorted list with the most popular author at the top.
 3. On which days did more than 1% of requests lead to errors? The log table includes a column status that indicates the HTTP status code that the news site sent to the user's browser.
 
-## Setting up the datebase
+## Setting up the database
 1. Install VirtualBox from [this link](https://www.virtualbox.org/wiki/Downloads) (Install package for your OS)
   * **Ubuntu users:** If you are running Ubuntu 14.04, install VirtualBox using the Ubuntu Software Center instead. Due to a reported bug, installing VirtualBox from the site may uninstall other software you need.
 2. Install Vagrant
