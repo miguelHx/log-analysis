@@ -13,8 +13,7 @@ There are three tables:
 ## Setting up the database
 1. Install VirtualBox from [this link](https://www.virtualbox.org/wiki/Downloads) (Install package for your OS)
   * **Ubuntu users:** If you are running Ubuntu 14.04, install VirtualBox using the Ubuntu Software Center instead. Due to a reported bug, installing VirtualBox from the site may uninstall other software you need.
-2. Install Vagrant
-  * Download it from [this link](https://www.vagrantup.com/downloads.html)
+2. Install Vagrant from [this link](https://www.vagrantup.com/downloads.html)
   * **Windows users:** The Installer may ask you to grant network permissions to Vagrant or make a firewall exception. Be sure to allow this.
 3. Download this repository as a zip file and then unzip to wherever
 4. Open up a terminal and run `cd log-analysis` and then `cd vagrant`
