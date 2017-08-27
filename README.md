@@ -12,20 +12,30 @@ There are three tables:
 
 ## Setting up the datebase
 1. Install VirtualBox from [this link](https://www.virtualbox.org/wiki/Downloads) (Install package for your OS)
+
 ⋅⋅* **Ubuntu users:** If you are running Ubuntu 14.04, install VirtualBox using the Ubuntu Software Center instead. Due to a reported bug, installing VirtualBox from the site may uninstall other software you need.
+
 2. Install Vagrant
+
 ..* Download it from [this link](https://www.vagrantup.com/downloads.html)
 ..* **Windows users:** The Installer may ask you to grant network permissions to Vagrant or make a firewall exception. Be sure to allow this.
+
 3. Download this repository as a zip file and then unzip to wherever
 4. Open up a terminal and run `cd log-analysis` and then `cd vagrant`
+
 ..* vagrant setup file will be in there
+
 5. Inside the **vagrant** subdirectory, run the command `vagrant up`
+
 ..* This will cause Vagrant to download the Linux operating system and install it
 ..* May take a while (many minutes) depending on your internet connection speed
+
 6. When `vagrant up` finishes running and the shell prompt is back, run `vagrant ssh` to log in to the Linux VM
+
 ..* Files in the VM's /vagrant directory are shared with the vagrant folder on your computer. But other data inside the VM is not. 
 ..* For instance, the PostgreSQL database itself lives only inside the VM.
 ..* If you exit the terminal or reboot the computer, you will need to run `vagrant up` to restart the VM
+
 7. Now that you are logged in, run `cd /vagrant` to gain access to the shared directory
 8. The sql file should be in the folder, so run `psql -d news -f newsdata.sql` to populate the database
 9. Once the data is loaded, connect to the database using `psql -d news` and explore the tables using `\dt` and `\d table` commands and `select` statements.
