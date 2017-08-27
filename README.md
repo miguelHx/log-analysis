@@ -27,7 +27,8 @@ There are three tables:
   * For instance, the PostgreSQL database itself lives only inside the VM.
   * If you exit the terminal or reboot the computer, you will need to run `vagrant up` to restart the VM
 7. Now that you are logged in, run `cd /vagrant` to gain access to the shared directory
-8. The sql file should be in the folder, so run `psql -d news -f newsdata.sql` to populate the database
+8. Download the .sql file from [here](https://www.dropbox.com/sh/id32zcts13oiduw/AADE5LRHXN5sK6N4qSMqianfa?dl=0) and save it to the /vagrant directory
+8. The sql file should be in the folder now, so run `psql -d news -f newsdata.sql` to populate the database
 9. Once the data is loaded, connect to the database using `psql -d news` and explore the tables using `\dt` and `\d table` commands and `select` statements.
 10. Setup is complete! Now it is time to run the log analysis program I wrote.
 
