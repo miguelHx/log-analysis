@@ -18,7 +18,7 @@ There are three tables:
 3. Download this repository as a zip file and then unzip to wherever
 4. Open up a terminal and run `cd log-analysis` and then `cd vagrant`
   * vagrant setup file will be in there
-   * **Windows users:** Make sure you use git bash
+   * **Windows users:** Make sure you use the VM
 5. Inside the **vagrant** subdirectory, run the command `vagrant up`
   * This will cause Vagrant to download the Linux operating system and install it
   * May take a while (many minutes) depending on your internet connection speed
