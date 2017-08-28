@@ -1,9 +1,15 @@
 # Log Analysis Project
 Purpose is to answer three questions based on data from a postgresql database called _news_
 There are three tables:
-* articles
-* authors
-* logs
+1. articles
+  * Column:Type -> author:integer, title:text, slug:text, lead:text, body:text, time:timestamptz, id:integer
+  * 8 rows
+2. authors
+  * Column:Type -> name:text, bio:text, id:integer
+  * 4 rows
+3. log
+  * Column:Type -> path:text, ip:inet, method:text, status:text, time:timestamptz, id:integer
+  * 1,677,735 rows
 
 ## Questions that the program answers
 1. What are the most popular three articles of all time? Which articles have been accessed the most? Present this information as a sorted list with the most popular article at the top.
@@ -13,12 +19,12 @@ There are three tables:
 ## Setting up the database
 1. Install VirtualBox from [this link](https://www.virtualbox.org/wiki/Downloads) (Install package for your OS)
   * **Ubuntu users:** If you are running Ubuntu 14.04, install VirtualBox using the Ubuntu Software Center instead. Due to a reported bug, installing VirtualBox from the site may uninstall other software you need.
-2. Install Vagrant from [this link](https://www.vagrantup.com/downloads.html)
+2. Install Vagrant
+  * Download it from [this link](https://www.vagrantup.com/downloads.html)
   * **Windows users:** The Installer may ask you to grant network permissions to Vagrant or make a firewall exception. Be sure to allow this.
 3. Download this repository as a zip file and then unzip to wherever
 4. Open up a terminal and run `cd log-analysis` and then `cd vagrant`
   * vagrant setup file will be in there
-   * **Windows users:** use git bash, download [here](https://git-scm.com/downloads)
 5. Inside the **vagrant** subdirectory, run the command `vagrant up`
   * This will cause Vagrant to download the Linux operating system and install it
   * May take a while (many minutes) depending on your internet connection speed
@@ -27,10 +33,10 @@ There are three tables:
   * For instance, the PostgreSQL database itself lives only inside the VM.
   * If you exit the terminal or reboot the computer, you will need to run `vagrant up` to restart the VM
 7. Now that you are logged in, run `cd /vagrant` to gain access to the shared directory
-8. Download the .sql file from [here](https://www.dropbox.com/sh/id32zcts13oiduw/AADE5LRHXN5sK6N4qSMqianfa?dl=0) and save it to the /vagrant directory
-8. The sql file should be in the folder now, so run `psql -d news -f newsdata.sql` to populate the database
-9. Once the data is loaded, connect to the database using `psql -d news` and explore the tables using `\dt` and `\d table` commands and `select` statements.
-10. Setup is complete! Now it is time to run the log analysis program I wrote.
+8. Download the .sql file from [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip), unzip, put file into same directory as log-analysis.py
+9. Run `psql -d news -f newsdata.sql` to populate the database
+10. Once the data is loaded, connect to the database using `psql -d news` and explore the tables using `\dt` and `\d table` commands and `select` statements.
+11. Setup is complete! Now it is time to run the log analysis program I wrote.
 
 
 ## Steps to Run Log Analysis
