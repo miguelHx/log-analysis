@@ -29,17 +29,17 @@ def popular_articles():
     db, cursor = connect()
 
     # one sql query to rule them all.
-    sql = (
-        'select title, count(*) as views '
-        '   from '
-        '   ('
-        '   select '
-        '       articles.title, articles.slug, log.path, log.status '
-        '       from articles join log '
-        '       on log.path = (\'/article/\' || articles.slug) '
-        '   ) as result '
-        'group by title order by views desc limit 3;'
-        )
+    sql = ("""
+        select title, count(*) as views 
+           from 
+           (
+           select 
+               articles.title, articles.slug, log.path, log.status 
+               from articles join log 
+               on log.path = ('/article/' || articles.slug) 
+           ) as result 
+        group by title order by views desc limit 3;
+        """)
     cursor.execute(sql)
     articles_result = cursor.fetchall()
 
@@ -65,14 +65,14 @@ def popular_authors():
     # open connection
     db, cursor = connect()
 
-    sql = (
-        'select authors.name, count(*) as views '
-        '   from authors, articles, log '
-        '       where authors.id = articles.author '
-        '       and log.path = (\'/article/\' || articles.slug) '
-        'group by authors.name '
-        'order by views desc limit 3;'
-    )
+    sql = ("""
+        select authors.name, count(*) as views 
+           from authors, articles, log 
+               where authors.id = articles.author 
+               and log.path = ('/article/' || articles.slug) 
+        group by authors.name 
+        order by views desc limit 3;
+        """)
     cursor.execute(sql)
     authors_result = cursor.fetchall()
 
@@ -100,27 +100,27 @@ def errors_analysis():
     db, cursor = connect()
 
     # get rows from db that have > 1.0 percentage error of http requests
-    sql = (
-        'select total.date, '
-        '100*(sum(error.http_requests)/(total.http_requests)) as percentage '
-        '   from '
-        '   ('
-        '   select '
-        '       date_trunc(\'day\', log.time) as date, '
-        '       count(*) as http_requests '
-        '       from log where log.status = \'404 NOT FOUND\''
-        '       group by date order by http_requests desc'
-        '   ) as error, '
-        '   ('
-        '   select '
-        '       date_trunc(\'day\', log.time) as date, '
-        '       count(*) as http_requests '
-        '       from log group by date order by http_requests desc'
-        '   ) as total '
-        'where error.date = total.date '
-        'group by total.date, total.http_requests '
-        'having 100*(sum(error.http_requests)/(total.http_requests)) > 1.0 '
-        'limit 3;'
+    sql = ("""
+        select total.date, 
+        100*(sum(error.http_requests)/(total.http_requests)) as percentage 
+           from 
+           (
+           select 
+               date_trunc('day', log.time) as date, 
+               count(*) as http_requests '
+               from log where log.status = '404 NOT FOUND'
+               group by date order by http_requests desc
+           ) as error, 
+           (
+           select 
+               date_trunc(\'day\', log.time) as date, 
+               count(*) as http_requests 
+               from log group by date order by http_requests desc
+           ) as total 
+        where error.date = total.date 
+        group by total.date, total.http_requests 
+        having 100*(sum(error.http_requests)/(total.http_requests)) > 1.0 
+        limit 3;
     )
 
     cursor.execute(sql)
