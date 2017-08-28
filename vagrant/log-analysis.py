@@ -3,7 +3,6 @@
 # stackoverflow, postgresql docs, and previous udacity lessons
 import psycopg2
 import datetime
-import calendar
 
 
 def connect(database_name="news"):
@@ -19,7 +18,6 @@ def popular_articles():
     """
     Presents the top 3 articles that have been viewed the most as a sorted list
     No input, data will be gathered from database.
-
     Example output:
     "Princess Shellfish Marries Prince Handsome" - 1201 views
     "Baltimore Ravens Defeat Rhode Island Shoggoths" - 915 views
@@ -30,13 +28,13 @@ def popular_articles():
 
     # one sql query to rule them all.
     sql = ("""
-        SELECT title, count(*) AS views 
-           FROM (
-               SELECT articles.title
-               FROM articles JOIN log
-               ON log.path = ('/article/' || articles.slug) 
-           ) AS result 
-        GROUP BY title 
+        SELECT title, views
+        FROM articles
+        INNER JOIN
+            (SELECT path, count(path) AS views
+             FROM log
+             GROUP BY log.path) AS log
+        ON log.path = '/article/' || articles.slug
         ORDER BY views DESC
         LIMIT 3;
         """)
@@ -46,16 +44,14 @@ def popular_articles():
     db.close()
 
     print("Most popular ARTICLES:")
-    for i in range(0, len(articles_result)):
-        print("\"" + articles_result[i][0] + "\" - " +
-              str(articles_result[i][1]) + " views")
+    for result in articles_result:
+        print('\"{}\" - {} views'.format(result[0], result[1]))
 
 
 def popular_authors():
     """
     Presents the top article authors who have the most views as a sorted list
     No input, data will be gathered from database.
-
     Example output:
     Ursula La Multa - 2304 views
     Rudolf von Treppenwitz - 1985 views
@@ -66,12 +62,12 @@ def popular_authors():
     db, cursor = connect()
 
     sql = ("""
-        select authors.name, count(*) as views 
-           from authors, articles, log 
-               where authors.id = articles.author 
-               and log.path = ('article' || articles.slug) 
-        group by authors.name 
-        order by views desc limit 3;
+        SELECT authors.name, count(*) AS views
+        FROM authors, articles, log
+            WHERE authors.id = articles.author
+            AND log.path = ('/article/' || articles.slug)
+        GROUP BY authors.name
+        ORDER BY views desc limit 3;
         """)
     cursor.execute(sql)
     authors_result = cursor.fetchall()
@@ -80,10 +76,8 @@ def popular_authors():
     db.close()
 
     print("Most popular AUTHORS:")
-    for i in range(0, len(authors_result)):
-        print(
-            authors_result[i][0] + " - " + str(authors_result[i][1]) + " views"
-            )
+    for result in authors_result:
+        print('{} - {} views'.format(result[0], result[1]))
 
 
 def errors_analysis():
@@ -101,24 +95,24 @@ def errors_analysis():
 
     # get rows from db that have > 1.0 percentage error of http requests
     sql = ("""
-        select total.date, 
-        100*(sum(error.http_requests)/(total.http_requests)) as percentage 
-           from 
+        select total.date,
+        100*(sum(error.http_requests)/(total.http_requests)) as percentage
+           from
            (
-           select 
-               date_trunc('day', log.time) as date, 
-               count(*) as http_requests '
+           select
+               date_trunc('day', log.time) as date,
+               count(*) as http_requests
                from log where log.status = '404 NOT FOUND'
                group by date order by http_requests desc
-           ) as error, 
+           ) as error,
            (
-           select 
-               date_trunc('day', log.time) as date, 
-               count(*) as http_requests 
+           select
+               date_trunc('day', log.time) as date,
+               count(*) as http_requests
                from log group by date order by http_requests desc
-           ) as total 
-        where error.date = total.date 
-        group by total.date, total.http_requests 
+           ) as total
+        where error.date = total.date
+        group by total.date, total.http_requests
         having 100*(sum(error.http_requests)/(total.http_requests)) > 1.0;
         """)
 
@@ -130,13 +124,8 @@ def errors_analysis():
     db.close()
 
     print("Dates where more than 1% of HTTP requests lead to errors:")
-    for i in range(0, len(error_list)):
-        error_date = str(calendar.month_name[error_list[i][0].month]) \
-            + " " + str(error_list[i][0].day) \
-            + ", " + str(error_list[i][0].year)
-        print(
-            error_date + " - " + str(error_list[i][1]) + "% errors"
-            )
+    for result in error_list:
+        print('{0:%B %d, %Y} - {1:.2f}% errors'.format(result[0], result[1]))
 
 
 if __name__ == "__main__":
