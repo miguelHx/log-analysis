@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 # written by Miguel Hernandez and with help from
 # stackoverflow, postgresql docs, and previous udacity lessons
 import psycopg2
