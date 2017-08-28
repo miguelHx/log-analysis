@@ -30,15 +30,15 @@ def popular_articles():
 
     # one sql query to rule them all.
     sql = ("""
-        select title, count(*) as views 
-           from 
-           (
-           select 
-               articles.title, articles.slug, log.path, log.status 
-               from articles join log 
-               on log.path = ('/article/' || articles.slug) 
-           ) as result 
-        group by title order by views desc limit 3;
+        SELECT title, count(*) AS views 
+           FROM (
+               SELECT articles.title
+               FROM articles JOIN log
+               ON log.path = ('/article/' || articles.slug) 
+           ) AS result 
+        GROUP BY title 
+        ORDER BY views DESC
+        LIMIT 3;
         """)
     cursor.execute(sql)
     articles_result = cursor.fetchall()
@@ -69,7 +69,7 @@ def popular_authors():
         select authors.name, count(*) as views 
            from authors, articles, log 
                where authors.id = articles.author 
-               and log.path = ('/article/' || articles.slug) 
+               and log.path = ('article' || articles.slug) 
         group by authors.name 
         order by views desc limit 3;
         """)
@@ -113,15 +113,14 @@ def errors_analysis():
            ) as error, 
            (
            select 
-               date_trunc(\'day\', log.time) as date, 
+               date_trunc('day', log.time) as date, 
                count(*) as http_requests 
                from log group by date order by http_requests desc
            ) as total 
         where error.date = total.date 
         group by total.date, total.http_requests 
-        having 100*(sum(error.http_requests)/(total.http_requests)) > 1.0 
-        limit 3;
-    )
+        having 100*(sum(error.http_requests)/(total.http_requests)) > 1.0;
+        """)
 
     cursor.execute(sql)
     # below is a list of tuples (str, datetime)
